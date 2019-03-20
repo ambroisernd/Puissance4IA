@@ -24,7 +24,13 @@ public class Grille {
 	 */
 	private Grille(Grille original)
 	{
-		//À compléter
+		int nbColonnes = original.grille.length;
+		int nbLigne = original.grille[0].length;
+		for(int i = 0; i < nbColonnes; i++){
+			for (int j = 0; j < nbLigne; j++){
+				grille[i][j] = original.getCase(i, j);
+			}
+		}
 	}
 	
 	/**
