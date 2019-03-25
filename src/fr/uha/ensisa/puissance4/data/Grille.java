@@ -4,6 +4,9 @@ package fr.uha.ensisa.puissance4.data;
 import fr.uha.ensisa.puissance4.util.Constantes;
 import fr.uha.ensisa.puissance4.util.Constantes.Case;
 
+import java.util.ArrayList;
+
+@SuppressWarnings("Duplicates")
 public class Grille {
 	
 	private Case[][] grille;
@@ -175,17 +178,143 @@ public class Grille {
 	/**
 	 * Donne un score à la grille en fonction du joueur 
 	 * @param symboleJoueurCourant
-	 * @return
+	 * @return score de la grille courante
 	 */
 	public double evaluer(Case symboleJoueurCourant)
 	{
-		//À compléter
-		return 0; 
+		ArrayList<Integer> alignement = verificationAlignements(symboleJoueurCourant);
+		double poidsDeux = alignement.get(0)*alignement.get(0);
+		double poidsTrois = alignement.get(1)*alignement.get(1);
+		double poidsQuatre = alignement.get(2)*100000; //infinie
+		return poidsDeux+poidsTrois+poidsQuatre;
 	}
-	
+
 	/**
-	 * Clone la grille
+	 *
+	 * @param symboleJoueurCourant
+	 * @return ArrayList contenant de 0 à 2 la liste du nombre d'alignements de 2 à 4
 	 */
+
+	private ArrayList<Integer> verificationAlignements(Case symboleJoueurCourant){
+		//Vérification alignement horizontaux
+		ArrayList<Integer> alignements = new ArrayList<Integer>();
+		int deux = 0;
+		int trois = 0;
+		int quatre = 0;
+		int nbAlignes=0;
+		for(int i=0;i<Constantes.NB_LIGNES;i++)
+		{
+			for(int j=0;j<Constantes.NB_COLONNES;j++)
+			{
+				if(grille[j][i]==symboleJoueurCourant)
+					nbAlignes++;
+				else{
+					switch (nbAlignes){
+						case 2:
+							deux++;
+							break;
+						case 3:
+							trois++;
+							break;
+						case 4:
+							quatre++;
+							break;
+						default:
+
+					}
+					nbAlignes=0;
+				}
+			}
+			nbAlignes=0;
+		}
+		//Vérification alignement verticaux
+		for(int j=0;j<Constantes.NB_COLONNES;j++) {
+			for (int i = 0; i < Constantes.NB_LIGNES; i++) {
+				if (grille[j][i] == symboleJoueurCourant)
+					nbAlignes++;
+				else {
+					switch (nbAlignes) {
+						case 2:
+							deux++;
+							break;
+						case 3:
+							trois++;
+							break;
+						case 4:
+							quatre++;
+							break;
+						default:
+
+					}
+					nbAlignes = 0;
+				}
+			}
+			nbAlignes = 0;
+		}
+		//Vérification alignement diagonaux (bas-droite vers haut-gauche)
+		for(int i=0;i<Constantes.NB_LIGNES-3;i++)
+			for(int j=0;j<Constantes.NB_COLONNES-3;j++)
+			{
+				for(int x=0;i+x<Constantes.NB_LIGNES&&j+x<Constantes.NB_COLONNES;x++)
+				{
+					if(grille[j+x][i+x]==symboleJoueurCourant)
+						nbAlignes++;
+					else {
+						switch (nbAlignes) {
+							case 2:
+								deux++;
+								break;
+							case 3:
+								trois++;
+								break;
+							case 4:
+								quatre++;
+								break;
+							default:
+
+						}
+						nbAlignes = 0;
+					}
+				}
+				nbAlignes = 0;
+			}
+
+		//Vérification alignement diagonaux (bas-gauche vers haut-droit)
+		for(int i=0;i<Constantes.NB_LIGNES-3;i++)
+			for(int j=Constantes.NB_COLONNES-1;j>=3;j--)
+			{
+				for(int x=0;i+x<Constantes.NB_LIGNES&&j-x>=0;x++)
+				{
+					if(grille[j-x][i+x]==symboleJoueurCourant)
+						nbAlignes++;
+					else {
+						switch (nbAlignes) {
+							case 2:
+								deux++;
+								break;
+							case 3:
+								trois++;
+								break;
+							case 4:
+								quatre++;
+								break;
+							default:
+
+						}
+						nbAlignes = 0;
+					}
+				}
+				nbAlignes = 0;
+			}
+		alignements.add(deux);
+		alignements.add(trois);
+		alignements.add(quatre);
+		return alignements;
+	}
+
+		/**
+         * Clone la grille
+         */
 	public Grille clone()
 	{
 		Grille copy = new Grille(this);
