@@ -211,13 +211,13 @@ public class Grille {
 				else{
 					switch (nbAlignes){
 						case 2:
-							deux++;
+							deux = deux + 1;
 							break;
 						case 3:
-							trois++;
+							trois = trois + 1;
 							break;
 						case 4:
-							quatre++;
+							quatre = quatre + 1;
 							break;
 						default:
 
@@ -235,13 +235,13 @@ public class Grille {
 				else {
 					switch (nbAlignes) {
 						case 2:
-							deux++;
+							deux = deux + 1;
 							break;
 						case 3:
-							trois++;
+							trois = trois + 1;
 							break;
 						case 4:
-							quatre++;
+							quatre = quatre + 1;
 							break;
 						default:
 
@@ -262,13 +262,13 @@ public class Grille {
 					else {
 						switch (nbAlignes) {
 							case 2:
-								deux++;
+								deux = deux + 1;
 								break;
 							case 3:
-								trois++;
+								trois = trois + 1;
 								break;
 							case 4:
-								quatre++;
+								quatre = quatre + 1;
 								break;
 							default:
 
@@ -290,13 +290,13 @@ public class Grille {
 					else {
 						switch (nbAlignes) {
 							case 2:
-								deux++;
+								deux = deux + 1;
 								break;
 							case 3:
-								trois++;
+								trois = trois + 1;
 								break;
 							case 4:
-								quatre++;
+								quatre = quatre + 1;
 								break;
 							default:
 
