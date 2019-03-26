@@ -3,6 +3,7 @@ package fr.uha.ensisa.puissance4.jeu.algosIA;
 import fr.uha.ensisa.puissance4.data.Grille;
 import fr.uha.ensisa.puissance4.data.Joueur;
 
+import java.util.ArrayList;
 
 
 public class Minimax extends Algorithm {
