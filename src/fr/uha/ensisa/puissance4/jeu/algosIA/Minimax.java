@@ -21,11 +21,22 @@ public class Minimax extends Algorithm {
 		
 		return 0;
 	}
-	
-	
 
-	
-	
-	
+
+	private Grille miniMaxDecision(Grille state){
+		return null;
+	}
+
+	private double maxValue(Grille state){
+		return 0;
+	}
+
+	private double minValue(Grille state){
+		return 0;
+	}
+
+
+
+
 
 }
