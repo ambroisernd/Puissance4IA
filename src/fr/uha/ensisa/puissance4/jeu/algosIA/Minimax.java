@@ -2,10 +2,15 @@ package fr.uha.ensisa.puissance4.jeu.algosIA;
 
 import fr.uha.ensisa.puissance4.data.Grille;
 import fr.uha.ensisa.puissance4.data.Joueur;
+import fr.uha.ensisa.puissance4.util.Constantes;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 
+@SuppressWarnings("Duplicates")
 public class Minimax extends Algorithm {
 	
 	
