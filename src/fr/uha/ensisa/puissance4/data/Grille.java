@@ -27,11 +27,10 @@ public class Grille {
 	 */
 	private Grille(Grille original)
 	{
-		int nbColonnes = original.grille.length;
-		int nbLigne = original.grille[0].length;
-		for(int i = 0; i < nbColonnes; i++){
-			for (int j = 0; j < nbLigne; j++){
-				grille[i][j] = original.getCase(i, j);
+		this();
+		for(int i = 0; i < Constantes.NB_COLONNES; i++){
+			for (int j = 0; j < Constantes.NB_LIGNES; j++){
+				grille[i][j] = original.getCase(j, i);
 			}
 		}
 	}
@@ -183,10 +182,28 @@ public class Grille {
 	public double evaluer(Case symboleJoueurCourant)
 	{
 		ArrayList<Integer> alignement = verificationAlignements(symboleJoueurCourant);
-		double poidsDeux = alignement.get(0)*alignement.get(0);
-		double poidsTrois = alignement.get(1)*alignement.get(1);
-		double poidsQuatre = alignement.get(2)*100000; //infinie
-		return poidsDeux+poidsTrois+poidsQuatre;
+		double poidsDeux = alignement.get(0)*alignement.get(0)*10;
+		double poidsTrois = alignement.get(1)*alignement.get(1)*alignement.get(1)*100000;
+		double poidsQuatre = alignement.get(2)*100000000; //infinie
+		return (poidsDeux+poidsTrois+poidsQuatre)+gauss(symboleJoueurCourant);
+	}
+
+	public int gauss(Case symboleJoueurCourant){
+		int[][] evaluationTable = {{3, 4, 5, 7, 5, 4, 3},
+				{4, 6, 8, 10, 8, 6, 4},
+				{5, 8, 11, 13, 11, 8, 5},
+				{5, 8, 11, 13, 11, 8, 5},
+				{4, 6, 8, 10, 8, 6, 4},
+				{3, 4, 5, 7, 5, 4, 3}};
+		int utility = 138;
+		int sum = 0;
+		for (int i = 0; i < Constantes.NB_LIGNES; i++)
+			for (int j = 0; j <Constantes.NB_COLONNES; j++)
+				if (grille[j][i] == symboleJoueurCourant)
+					sum += evaluationTable[i][j];
+				else if (grille[j][i] != symboleJoueurCourant && grille[j][i] != Case.V)
+					sum -= evaluationTable[i][j];
+		return utility + sum;
 	}
 
 	/**
