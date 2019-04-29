@@ -7,10 +7,10 @@ import fr.uha.ensisa.puissance4.util.Constantes;
 import java.util.ArrayList;
 
 
+@SuppressWarnings("Duplicates")
 public class Minimax extends Algorithm {
 
-
-
+	int coup;
 	public Minimax(int levelIA, Grille grilleDepart, Joueur joueurActuel, int tour) {
 		super(levelIA, grilleDepart, joueurActuel, tour);
 
@@ -18,62 +18,71 @@ public class Minimax extends Algorithm {
 
 	@Override
 	public int choisirCoup() {
-		int coup = 0;
-		double value = Double.MIN_VALUE;
 		for (int i = 0; i<Constantes.NB_COLONNES; i++){
-			double evaluation = Double.MIN_VALUE;
-			if (grilleDepart.isCoupPossible(i)){
-				Grille cpy = grilleDepart.clone();
-				cpy.ajouterCoup(i, symboleMax);
-				evaluation = minimax(cpy, levelIA, symboleMax);
-				if (evaluation > value){
-					value = evaluation;
-					coup = i;
-				}
-			}
-		}
-
-		//blocage
-
-		for (int i = 0; i<Constantes.NB_COLONNES; i++){
-			double evaluation = Double.MIN_VALUE;
 			if (grilleDepart.isCoupPossible(i)){
 				Grille cpy = grilleDepart.clone();
 				cpy.ajouterCoup(i, symboleMin);
-				if (cpy.evaluer(symboleMin)>100000000){
+				if (cpy.evaluer(symboleMin)<-10000){
 					return i;
 				}
 			}
 		}
+		maxi(grilleDepart, levelIA);
 		return coup;
 	}
 
-	public double minimax(Grille grille, int profondeur, Constantes.Case max){
-		if (profondeur == 0 ||
-				grille.getEtatPartie(max, tourDepart+profondeur)==Constantes.VICTOIRE_JOUEUR_1
-				|| grille.getEtatPartie(max, tourDepart+profondeur)== Constantes.VICTOIRE_JOUEUR_2
-				|| grille.getEtatPartie(max, tourDepart+profondeur)== Constantes.MATCH_NUL){
+	public double maxi(Grille grille, int profondeur) {
+		ArrayList<Integer> successors = new ArrayList<>();
+		if (profondeur == 0) {
 			return grille.evaluer(symboleMax);
-		}
-		if (max == symboleMax){
-			double value = Double.MIN_VALUE;
-			for (int i = 0; i<Constantes.NB_COLONNES; i++){
-				Grille cpy = grille.clone();
-				cpy.ajouterCoup(i, symboleMin);
-				value = Math.max(value, minimax(cpy, profondeur - 1, symboleMin));
+		} else {
+			for (int i = 0; i < Constantes.NB_COLONNES; i++) {
+				if (grille.isCoupPossible(i)) {
+					successors.add(i);
+				}
 			}
-			return value;
-		}
-		else {
-			double value = Double.MAX_VALUE;
-			for (int i = 0; i<Constantes.NB_COLONNES; i++){
-				Grille cpy = grille.clone();
-				cpy.ajouterCoup(i, symboleMax);
-				value = Math.min(value, minimax(cpy, profondeur-1, symboleMax));
+			double value = -100000000;
+			double tmp;
+			for (int i = 0; i < successors.size(); i++) {
+				tmp = mini(genSuccessor(grille, symboleMax, successors.get(i)), profondeur);
+				if (tmp >= value){
+					value = tmp;
+					this.coup = successors.get(i);
+				}
 			}
 			return value;
 		}
 	}
+
+	public double mini(Grille grille, int profondeur) {
+		ArrayList<Integer> successors = new ArrayList<>();
+		if (profondeur == 0) {
+			return grille.evaluer(symboleMax);
+		} else {
+			for (int i = 0; i < Constantes.NB_COLONNES; i++) {
+				if (grille.isCoupPossible(i)) {
+					successors.add(i);
+				}
+			}
+			double value = 100000000;
+			double tmp;
+			for (int i = 0; i < successors.size(); i++) {
+				tmp = maxi(genSuccessor(grille, symboleMin, successors.get(i)), profondeur-1);
+				if (tmp <= value){
+					value = tmp;
+				}
+			}
+			return value;
+		}
+	}
+
+	public Grille genSuccessor(Grille grille, Constantes.Case symbolJoueur, int i) {
+		Grille cpy = grille.clone();
+		cpy.ajouterCoup(i, symbolJoueur);
+		return cpy;
+	}
+
+
 
 
 

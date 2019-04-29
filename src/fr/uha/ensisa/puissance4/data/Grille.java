@@ -181,11 +181,23 @@ public class Grille {
 	 */
 	public double evaluer(Case symboleJoueurCourant)
 	{
-		ArrayList<Integer> alignement = verificationAlignements(symboleJoueurCourant);
-		double poidsDeux = alignement.get(0)*alignement.get(0)*10;
-		double poidsTrois = alignement.get(1)*alignement.get(1)*alignement.get(1)*100000;
-		double poidsQuatre = alignement.get(2)*100000000; //infinie
-		return (poidsDeux+poidsTrois+poidsQuatre)+gauss(symboleJoueurCourant);
+		Case symboleAutreJoueur;
+		if (symboleJoueurCourant == Case.X){
+			symboleAutreJoueur = Case.O;
+		}
+		else {
+			symboleAutreJoueur = Case.X;
+		}
+		ArrayList<Integer> alignementX = verificationAlignements(symboleJoueurCourant);
+		ArrayList<Integer> alignementO = verificationAlignements(symboleAutreJoueur);
+		double poidsDeuxX = alignementX.get(0)*alignementX.get(0);
+		double poidsDeuxO = alignementO.get(0)*alignementO.get(0)*(-1);
+		double poidsTroisX = alignementX.get(1)*alignementX.get(1)*alignementX.get(1);
+		double poidsTroisO = alignementX.get(1)*alignementX.get(1)*alignementX.get(1)*(-1);
+		double poidsQuatreX = alignementX.get(2)*100000;
+		double poidsQuatreO = alignementO.get(2)*-100000;
+		return poidsQuatreO+poidsQuatreX+poidsDeuxO+poidsDeuxX+poidsTroisO+poidsTroisX+gauss(symboleJoueurCourant)-gauss(symboleAutreJoueur);
+		//return poidsQuatreO+poidsQuatreX;
 	}
 
 	public int gauss(Case symboleJoueurCourant){
