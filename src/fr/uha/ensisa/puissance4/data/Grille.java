@@ -191,10 +191,10 @@ public class Grille {
 		ArrayList<Integer> alignementX = verificationAlignements(symboleJoueurCourant);
 		ArrayList<Integer> alignementO = verificationAlignements(symboleAutreJoueur);
 		double poidsDeuxX = alignementX.get(0)*alignementX.get(0);
-		double poidsDeuxO = alignementO.get(0)*alignementO.get(0)*(-1);
+		double poidsDeuxO = alignementO.get(0)*alignementO.get(0)*(-10);
 		double poidsTroisX = alignementX.get(1)*alignementX.get(1)*alignementX.get(1);
-		double poidsTroisO = alignementX.get(1)*alignementX.get(1)*alignementX.get(1)*(-1);
-		double poidsQuatreX = alignementX.get(2)*100000;
+		double poidsTroisO = alignementX.get(1)*alignementX.get(1)*alignementX.get(1)*(-10);
+		double poidsQuatreX = alignementX.get(2)*1000;
 		double poidsQuatreO = alignementO.get(2)*-100000;
 		return poidsQuatreO+poidsQuatreX+poidsDeuxO+poidsDeuxX+poidsTroisO+poidsTroisX+gauss(symboleJoueurCourant)-gauss(symboleAutreJoueur);
 		//return poidsQuatreO+poidsQuatreX;
