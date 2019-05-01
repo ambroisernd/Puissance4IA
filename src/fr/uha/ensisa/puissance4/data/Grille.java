@@ -188,7 +188,7 @@ public class Grille {
 		else {
 			symboleAutreJoueur = Case.X;
 		}
-		return verificationAlignements(symboleJoueurCourant)-verificationAlignements(symboleAutreJoueur)+gauss(symboleJoueurCourant)*0.001;
+		return verificationAlignements(symboleJoueurCourant)-verificationAlignements(symboleAutreJoueur)+gauss(symboleJoueurCourant)*0.5-gauss(symboleAutreJoueur)*0.5;
 	}
 
 	public int gauss(Case symboleJoueurCourant){
@@ -210,6 +210,7 @@ public class Grille {
 	}
 
 	public double verificationAlignements(Case symboleJoueurCourant) {
+		int score = 0;
 		int nbAlignes = 0;
 		//Vérification alignement horizontaux
 		for (int i = 0; i < Constantes.NB_LIGNES; i++) {
@@ -219,7 +220,7 @@ public class Grille {
 				else
 					nbAlignes = 0;
 				if (nbAlignes == 4) {
-					return 1;
+					score++;
 				}
 			}
 			nbAlignes = 0;
@@ -232,7 +233,7 @@ public class Grille {
 				else
 					nbAlignes = 0;
 				if (nbAlignes == 4) {
-					return 1;
+					score++;
 				}
 			}
 			nbAlignes = 0;
@@ -246,7 +247,7 @@ public class Grille {
 					else
 						nbAlignes = 0;
 					if (nbAlignes == 4) {
-						return 1;
+						score++;
 					}
 				}
 				nbAlignes = 0;
@@ -261,12 +262,12 @@ public class Grille {
 					else
 						nbAlignes = 0;
 					if (nbAlignes == 4) {
-						return 1;
+						score++;
 					}
 				}
 				nbAlignes = 0;
 			}
-		return 0;
+		return score;
 	}
 
 		/**
