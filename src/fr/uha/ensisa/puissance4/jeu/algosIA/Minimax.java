@@ -33,7 +33,10 @@ public class Minimax extends Algorithm {
 
 	public double maxi(Grille grille, int profondeur) {
 		ArrayList<Integer> successors = new ArrayList<>();
-		if (profondeur == 0) {
+		if (profondeur == 0 ||
+				grille.getEtatPartie(symboleMax, tourDepart+profondeur)==Constantes.VICTOIRE_JOUEUR_1
+				|| grille.getEtatPartie(symboleMax, tourDepart+profondeur)== Constantes.VICTOIRE_JOUEUR_2
+				|| grille.getEtatPartie(symboleMax, tourDepart+profondeur)== Constantes.MATCH_NUL){
 			return grille.evaluer(symboleMax);
 		} else {
 			for (int i = 0; i < Constantes.NB_COLONNES; i++) {
@@ -56,7 +59,10 @@ public class Minimax extends Algorithm {
 
 	public double mini(Grille grille, int profondeur) {
 		ArrayList<Integer> successors = new ArrayList<>();
-		if (profondeur == 0) {
+		if (profondeur == 0 ||
+				grille.getEtatPartie(symboleMax, tourDepart+profondeur)==Constantes.VICTOIRE_JOUEUR_1
+				|| grille.getEtatPartie(symboleMax, tourDepart+profondeur)== Constantes.VICTOIRE_JOUEUR_2
+				|| grille.getEtatPartie(symboleMax, tourDepart+profondeur)== Constantes.MATCH_NUL){
 			return grille.evaluer(symboleMax);
 		} else {
 			for (int i = 0; i < Constantes.NB_COLONNES; i++) {
