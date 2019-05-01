@@ -18,15 +18,14 @@ public class Minimax extends Algorithm {
 
 	@Override
 	public int choisirCoup() {
-		double value = maxi(grilleDepart, levelIA);
+		double value = maxi(grilleDepart, tourMax);
 		return coup;
 	}
 
 	public double maxi(Grille grille, int profondeur) {
 		ArrayList<Integer> successors = new ArrayList<>();
-		if (profondeur == 0 || victoire(grille)){
-			double value = grille.evaluer(symboleMax);
-			return value;
+		if (profondeur==tourDepart || victoire(grille, symboleMin)){
+			return grille.evaluer(symboleMax);
 		}
 		else {
 			for (int i = 0; i < Constantes.NB_COLONNES; i++) {
@@ -51,7 +50,7 @@ public class Minimax extends Algorithm {
 
 	public double mini(Grille grille, int profondeur) {
 		ArrayList<Integer> successors = new ArrayList<>();
-		if (profondeur == 0 || victoire(grille)){
+		if (profondeur==tourDepart || victoire(grille, symboleMax)){
 			return grille.evaluer(symboleMax);
 		}
 		else {
@@ -72,8 +71,8 @@ public class Minimax extends Algorithm {
 		}
 	}
 
-	private boolean victoire(Grille grille) {
-		return (grille.verificationAlignements(symboleMax) != 0 || grille.verificationAlignements(symboleMin) != 0);
+	private boolean victoire(Grille grille, Constantes.Case joueur) {
+		return (grille.verificationAlignements(joueur) > 0);
 	}
 
 	public Grille genSuccessor(Grille grille, Constantes.Case symbolJoueur, int i) {
