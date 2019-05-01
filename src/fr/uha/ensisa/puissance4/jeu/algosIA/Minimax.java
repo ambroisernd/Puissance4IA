@@ -18,53 +18,42 @@ public class Minimax extends Algorithm {
 
 	@Override
 	public int choisirCoup() {
-		for (int i = 0; i<Constantes.NB_COLONNES; i++){
-			if (grilleDepart.isCoupPossible(i)){
-				Grille cpy = grilleDepart.clone();
-				cpy.ajouterCoup(i, symboleMin);
-				if (cpy.evaluer(symboleMin)<-10000){
-					return i;
-				}
-			}
-		}
-		maxi(grilleDepart, levelIA);
+		double value = maxi(grilleDepart, tourMax);
 		return coup;
 	}
 
 	public double maxi(Grille grille, int profondeur) {
 		ArrayList<Integer> successors = new ArrayList<>();
-		if (profondeur == 0 ||
-				grille.getEtatPartie(symboleMax, tourDepart+profondeur)==Constantes.VICTOIRE_JOUEUR_1
-				|| grille.getEtatPartie(symboleMax, tourDepart+profondeur)== Constantes.VICTOIRE_JOUEUR_2
-				|| grille.getEtatPartie(symboleMax, tourDepart+profondeur)== Constantes.MATCH_NUL){
+		if (profondeur==tourDepart || victoire(grille, symboleMin)){
 			return grille.evaluer(symboleMax);
-		} else {
+		}
+		else {
 			for (int i = 0; i < Constantes.NB_COLONNES; i++) {
 				if (grille.isCoupPossible(i)) {
 					successors.add(i);
 				}
 			}
-			double value = -100000000;
-			double tmp;
-			for (int i = 0; i < successors.size(); i++) {
-				tmp = mini(genSuccessor(grille, symboleMax, successors.get(i)), profondeur);
-				if (tmp >= value){
-					value = tmp;
-					this.coup = successors.get(i);
-				}
+		double value = -100000000;
+		double tmp;
+		for (int i = 0; i < successors.size(); i++) {
+
+			tmp = mini(genSuccessor(grille, symboleMax, successors.get(i)), profondeur);
+			if (tmp >= value){
+				value = tmp;
+				this.coup = successors.get(i);
 			}
+		}
 			return value;
 		}
 	}
 
+
 	public double mini(Grille grille, int profondeur) {
 		ArrayList<Integer> successors = new ArrayList<>();
-		if (profondeur == 0 ||
-				grille.getEtatPartie(symboleMax, tourDepart+profondeur)==Constantes.VICTOIRE_JOUEUR_1
-				|| grille.getEtatPartie(symboleMax, tourDepart+profondeur)== Constantes.VICTOIRE_JOUEUR_2
-				|| grille.getEtatPartie(symboleMax, tourDepart+profondeur)== Constantes.MATCH_NUL){
+		if (profondeur==tourDepart || victoire(grille, symboleMax)){
 			return grille.evaluer(symboleMax);
-		} else {
+		}
+		else {
 			for (int i = 0; i < Constantes.NB_COLONNES; i++) {
 				if (grille.isCoupPossible(i)) {
 					successors.add(i);
@@ -82,19 +71,13 @@ public class Minimax extends Algorithm {
 		}
 	}
 
+	private boolean victoire(Grille grille, Constantes.Case joueur) {
+		return (grille.verificationAlignements(joueur) > 0);
+	}
+
 	public Grille genSuccessor(Grille grille, Constantes.Case symbolJoueur, int i) {
 		Grille cpy = grille.clone();
 		cpy.ajouterCoup(i, symbolJoueur);
 		return cpy;
 	}
-
-
-
-
-
-
-
-
-
-
 }
