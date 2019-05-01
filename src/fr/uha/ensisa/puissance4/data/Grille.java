@@ -188,7 +188,7 @@ public class Grille {
 		else {
 			symboleAutreJoueur = Case.X;
 		}
-		return verificationAlignements(symboleJoueurCourant)-verificationAlignements(symboleAutreJoueur)+gauss(symboleJoueurCourant)*0.5-gauss(symboleAutreJoueur)*0.5;
+		return verificationAlignements(symboleJoueurCourant)-verificationAlignements(symboleAutreJoueur)+gauss(symboleJoueurCourant)*0.001-gauss(symboleAutreJoueur)*0.001;
 	}
 
 	public int gauss(Case symboleJoueurCourant){

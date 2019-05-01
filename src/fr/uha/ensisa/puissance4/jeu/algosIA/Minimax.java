@@ -60,7 +60,7 @@ public class Minimax extends Algorithm {
 	public double mini(Grille grille, int profondeur) {
 		ArrayList<Integer> successors = new ArrayList<>();
 		if (profondeur==tourMax || victoire(grille, symboleMax)){
-			return grille.evaluer(symboleMin);
+			return grille.evaluer(symboleMax);
 		}
 		else {
 			for (int i = 0; i < Constantes.NB_COLONNES; i++) {
