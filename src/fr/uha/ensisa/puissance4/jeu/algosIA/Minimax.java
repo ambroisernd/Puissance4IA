@@ -10,7 +10,6 @@ import java.util.ArrayList;
 @SuppressWarnings("Duplicates")
 public class Minimax extends Algorithm {
 
-	int coup;
 	public Minimax(int levelIA, Grille grilleDepart, Joueur joueurActuel, int tour) {
 		super(levelIA, grilleDepart, joueurActuel, tour);
 
@@ -18,13 +17,26 @@ public class Minimax extends Algorithm {
 
 	@Override
 	public int choisirCoup() {
-		double value = maxi(grilleDepart, tourMax);
-		return coup;
+		int colAJouer = 0;
+		double meilleurValue = Constantes.SCORE_MAX_NON_DEFINI;
+		for (int i =0; i < Constantes.NB_COLONNES; i++){
+			if (grilleDepart.isCoupPossible(i)){
+				Grille cpy = grilleDepart.clone();
+				cpy.ajouterCoup(i, symboleMax);
+				double value = mini(cpy, tourDepart);
+				if (value >= meilleurValue){
+					meilleurValue = value;
+					colAJouer = i;
+				}
+			}
+
+		}
+		return colAJouer;
 	}
 
 	public double maxi(Grille grille, int profondeur) {
 		ArrayList<Integer> successors = new ArrayList<>();
-		if (profondeur==tourDepart || victoire(grille, symboleMin)){
+		if (profondeur==tourMax || victoire(grille, symboleMin)){
 			return grille.evaluer(symboleMax);
 		}
 		else {
@@ -33,16 +45,13 @@ public class Minimax extends Algorithm {
 					successors.add(i);
 				}
 			}
-		double value = Constantes.SCORE_MAX_NON_DEFINI;
-		double tmp;
-		for (int i = 0; i < successors.size(); i++) {
+			double value = Constantes.SCORE_MAX_NON_DEFINI;
+			double tmp;
+			for (int i = 0; i < successors.size(); i++) {
 
-			tmp = mini(genSuccessor(grille, symboleMax, successors.get(i)), profondeur);
-			if (tmp >= value){
-				value = tmp;
-				this.coup = successors.get(i);
+				tmp = mini(genSuccessor(grille, symboleMax, successors.get(i)), profondeur+1);
+				value = Math.max(value, tmp);
 			}
-		}
 			return value;
 		}
 	}
@@ -50,7 +59,7 @@ public class Minimax extends Algorithm {
 
 	public double mini(Grille grille, int profondeur) {
 		ArrayList<Integer> successors = new ArrayList<>();
-		if (profondeur==tourDepart || victoire(grille, symboleMax)){
+		if (profondeur==tourMax || victoire(grille, symboleMax)){
 			return grille.evaluer(symboleMax);
 		}
 		else {
@@ -62,10 +71,8 @@ public class Minimax extends Algorithm {
 			double value = Constantes.SCORE_MIN_NON_DEFINI;
 			double tmp;
 			for (int i = 0; i < successors.size(); i++) {
-				tmp = maxi(genSuccessor(grille, symboleMin, successors.get(i)), profondeur-1);
-				if (tmp <= value){
-					value = tmp;
-				}
+				tmp = maxi(genSuccessor(grille, symboleMin, successors.get(i)), profondeur+1);
+				value = Math.min(value, tmp);
 			}
 			return value;
 		}
