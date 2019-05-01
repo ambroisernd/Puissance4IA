@@ -27,7 +27,6 @@ public class AlphaBeta extends Algorithm {
 			}
 		}
 
-		boolean isMax = false;
 		double maxEval = -Double.MAX_VALUE;
 		double newEval;
 		int maxCoup = 1;
@@ -40,7 +39,7 @@ public class AlphaBeta extends Algorithm {
 			newCoup = i;
 			Grille nouvelleGrille = grilleDepart.clone();
 			nouvelleGrille.ajouterCoup(i, symboleMax);
-			newEval = alphabeta(symboleMin,grille.clone(), alpha, beta, profondeur, isMax);
+			newEval = mini(grille.clone(), alpha, beta, profondeur);
 
 			if (newEval >= maxEval) {
 				maxEval = newEval;
@@ -50,94 +49,58 @@ public class AlphaBeta extends Algorithm {
 		coup = maxCoup;
 		return coup;
 	}
-/*
-	double alphabeta(Constantes.Case symboleJoueurCourant, Grille grille, double alpha, double beta, int profondeur){
-		if(profondeur == 0 ){
-			return grille.evaluer(symboleJoueurCourant);
-		}
-		else if (symboleJoueurCourant == symboleMin){ //Si le joueur est Min (donc autre)
-			double v = Double.MAX_VALUE;
-			//Construction coups possible
-			ArrayList<Integer> actions = new ArrayList<Integer>();
-			for(int i = 0; i< Constantes.NB_COLONNES; i++){
-				if(grille.isCoupPossible(i)){
-					actions.add(i);
-				}
-			}
 
-			for(Integer i : actions){
-				Grille cpy = grille.clone();
-				cpy.ajouterCoup(i,symboleMin);
-				v = Math.min(v, alphabeta(symboleJoueurCourant, cpy, alpha, beta, profondeur -1));
-				if(alpha > v){
-					return v;
-				}
-				beta = Math.min(beta, v);
-			}
-		}
-		else{
-			double v = -Double.MAX_VALUE;
-
-			//Construction coups possible
-			ArrayList<Integer> actions = new ArrayList<Integer>();
-			for(int i = 0; i< Constantes.NB_COLONNES; i++){
-				if(grille.isCoupPossible(i)){
-					actions.add(i);
-				}
-			}
-
-			for(Integer i : actions){
-				Grille cpy = grille.clone();
-				cpy.ajouterCoup(i,symboleMax);
-				v = Math.max(v, alphabeta(symboleJoueurCourant, cpy, alpha, beta, profondeur -1));
-				if(v >= beta){
-					return v;
-				}
-				alpha = Math.max(beta, v);
-			}
-
-		}
-		return v;
-	}
-*/
-
-	double alphabeta(Constantes.Case symboleJoueurCourant, Grille grille, double alpha, double beta, int profondeur, boolean isMax) {
-		if (profondeur == 0) {
-			return grille.evaluer(symboleJoueurCourant);
-		}
-		else {
-			double meilleur = Constantes.SCORE_MAX_NON_DEFINI;
-			//Construction coups possible
-			ArrayList<Integer> actions = new ArrayList<Integer>();
+	public double maxi(Grille grille, double alpha, double beta, int profondeur) {
+		double max = Constantes.SCORE_MAX_NON_DEFINI;
+		if (profondeur == 0 || victoire(grille, symboleMin)) {
+			return grille.evaluer(symboleMax);
+		} else {
 			for (int i = 0; i < Constantes.NB_COLONNES; i++) {
 				if (grille.isCoupPossible(i)) {
-					actions.add(i);
-				}
-			}
+					Grille grilleNew = grille.clone();
+					grilleNew.ajouterCoup(i, symboleMax);
+					double meilleur = mini(grilleNew, alpha, beta, profondeur - 1);
 
-			for (Integer i : actions) {
-				Grille cpy = grille.clone();
-				cpy.ajouterCoup(i, symboleJoueurCourant);
-				double v;
-				if (isMax){
-					v = -alphabeta(symboleMin, cpy, -beta, -alpha, profondeur - 1, !isMax);
-				}
-				else{
-					v = -alphabeta(symboleMax, cpy, -beta, -alpha, profondeur - 1, !isMax);
-				}
-
-				if (v > meilleur) {
-					meilleur = v;
-					if (meilleur > alpha) {
-						alpha = meilleur;
-						if (alpha >= beta) {
-							return meilleur;
-						}
+					if (meilleur > beta) {
+						return meilleur;
 					}
+					max = Math.max(meilleur, max);
+					alpha = Math.max(alpha, meilleur);
 				}
 			}
-			return meilleur;
+			return max;
 		}
-
 	}
+
+
+
+
+	public double mini(Grille grille, double alpha, double beta, int profondeur) {
+		double min = Constantes.SCORE_MIN_NON_DEFINI;
+		if (profondeur==0 || victoire(grille, symboleMax)){
+			return grille.evaluer(symboleMax);
+		}
+		else {
+			for (int i = 0; i < Constantes.NB_COLONNES; i++) {
+				if (grille.isCoupPossible(i)) {
+					Grille grilleNew = grille.clone();
+					grilleNew.ajouterCoup(i, symboleMax);
+					double meilleur = maxi(grilleNew, alpha, beta, profondeur - 1);
+
+					if (meilleur < alpha) {
+						return meilleur;
+					}
+					min = Math.min(meilleur, min);
+					beta = Math.min(beta, meilleur);
+				}
+			}
+			return min;
+		}
+	}
+
+
+	private boolean victoire(Grille grille, Constantes.Case joueur) {
+		return (grille.verificationAlignements(joueur) > 0);
+	}
+
 }
