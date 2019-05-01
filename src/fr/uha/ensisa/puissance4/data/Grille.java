@@ -188,17 +188,7 @@ public class Grille {
 		else {
 			symboleAutreJoueur = Case.X;
 		}
-		//ArrayList<Integer> alignementX = verificationAlignements(symboleJoueurCourant);
-		//ArrayList<Integer> alignementO = verificationAlignements(symboleAutreJoueur);
-		//double poidsDeuxX = alignementX.get(0)*2;
-		//double poidsDeuxO = alignementO.get(0)*3*(-1);
-		//double poidsTroisX = alignementX.get(1)*8;
-		//double poidsTroisO = alignementO.get(1)*10*(-1);
-		//double poidsQuatreX = alignementX.get(2)*1;
-		//double poidsQuatreO = alignementO.get(2)*-1;
-		//System.out.println(verificationAlignements(symboleAutreJoueur));
-		return verificationAlignements(symboleJoueurCourant)*1-verificationAlignements(symboleAutreJoueur)*(100)+gauss(symboleJoueurCourant)-gauss(symboleAutreJoueur);//+poidsDeuxO+poidsDeuxX+poidsTroisX+poidsTroisO+gauss(symboleJoueurCourant)*0.5-gauss(symboleAutreJoueur)*0.5;//+gauss(symboleJoueurCourant)-gauss(symboleAutreJoueur)
-		//return poidsQuatreO+poidsQuatreX;
+		return verificationAlignements(symboleJoueurCourant)-(verificationAlignements(symboleAutreJoueur)*100);
 	}
 
 	public int gauss(Case symboleJoueurCourant){
@@ -219,7 +209,7 @@ public class Grille {
 		return utility + sum;
 	}
 
-	private double verificationAlignements(Case symboleJoueurCourant) {
+	public double verificationAlignements(Case symboleJoueurCourant) {
 		int nbAlignes = 0;
 		//Vérification alignement horizontaux
 		for (int i = 0; i < Constantes.NB_LIGNES; i++) {
