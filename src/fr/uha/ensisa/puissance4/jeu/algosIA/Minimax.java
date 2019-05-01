@@ -18,7 +18,7 @@ public class Minimax extends Algorithm {
 
 	@Override
 	public int choisirCoup() {
-		maxi(grilleDepart, levelIA);
+		double value = maxi(grilleDepart, levelIA);
 		return coup;
 	}
 
@@ -37,6 +37,7 @@ public class Minimax extends Algorithm {
 		double value = -100000000;
 		double tmp;
 		for (int i = 0; i < successors.size(); i++) {
+
 			tmp = mini(genSuccessor(grille, symboleMax, successors.get(i)), profondeur);
 			if (tmp >= value){
 				value = tmp;
@@ -47,9 +48,6 @@ public class Minimax extends Algorithm {
 		}
 	}
 
-	private boolean victoire(Grille grille) {
-		return (grille.verificationAlignements(symboleMax) != 0 || grille.verificationAlignements(symboleMin) != 0);
-	}
 
 	public double mini(Grille grille, int profondeur) {
 		ArrayList<Integer> successors = new ArrayList<>();
@@ -74,19 +72,13 @@ public class Minimax extends Algorithm {
 		}
 	}
 
+	private boolean victoire(Grille grille) {
+		return (grille.verificationAlignements(symboleMax) != 0 || grille.verificationAlignements(symboleMin) != 0);
+	}
+
 	public Grille genSuccessor(Grille grille, Constantes.Case symbolJoueur, int i) {
 		Grille cpy = grille.clone();
 		cpy.ajouterCoup(i, symbolJoueur);
 		return cpy;
 	}
-
-
-
-
-
-
-
-
-
-
 }
