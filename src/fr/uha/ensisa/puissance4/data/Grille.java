@@ -8,9 +8,9 @@ import java.util.ArrayList;
 
 @SuppressWarnings("Duplicates")
 public class Grille {
-	
+
 	private Case[][] grille;
-	
+
 	public Grille()
 	{
 		grille= new Case[Constantes.NB_COLONNES][Constantes.NB_LIGNES];
@@ -18,9 +18,9 @@ public class Grille {
 			for(int j=0;j<Constantes.NB_LIGNES;j++)
 			{
 				grille[i][j] = Case.V;
-			}		
+			}
 	}
-	
+
 	/**
 	 * Constructeur qui créé une copie de la grille donné en argument
 	 * @param original
@@ -34,7 +34,7 @@ public class Grille {
 			}
 		}
 	}
-	
+
 	/**
 	 * Renvoie le contenu de la case aux coordonnées données en argument
 	 * @param ligne
@@ -77,9 +77,9 @@ public class Grille {
 				break;
 			}
 		}
-		
+
 	}
-	
+
 	/**
 	 * Renvoie l'état de la partie
 	 * @param symboleJoueurCourant
@@ -147,7 +147,7 @@ public class Grille {
 				}
 				nbAlignes=0;
 			}
-		
+
 		//Vérification alignement diagonaux (bas-gauche vers haut-droit)
 		for(int i=0;i<Constantes.NB_LIGNES-3;i++)
 			for(int j=Constantes.NB_COLONNES-1;j>=3;j--)
@@ -165,17 +165,17 @@ public class Grille {
 				}
 				nbAlignes=0;
 			}
-		
+
 		if(tour==Constantes.NB_TOUR_MAX)
 		{
 			return Constantes.MATCH_NUL;
 		}
-		
+
 		return Constantes.PARTIE_EN_COURS;
 	}
-	
+
 	/**
-	 * Donne un score à la grille en fonction du joueur 
+	 * Donne un score à la grille en fonction du joueur
 	 * @param symboleJoueurCourant
 	 * @return score de la grille courante
 	 */
@@ -188,15 +188,16 @@ public class Grille {
 		else {
 			symboleAutreJoueur = Case.X;
 		}
-		ArrayList<Integer> alignementX = verificationAlignements(symboleJoueurCourant);
-		ArrayList<Integer> alignementO = verificationAlignements(symboleAutreJoueur);
-		double poidsDeuxX = alignementX.get(0)*alignementX.get(0);
-		double poidsDeuxO = alignementO.get(0)*alignementO.get(0)*(-1);
-		double poidsTroisX = alignementX.get(1)*alignementX.get(1)*alignementX.get(1);
-		double poidsTroisO = alignementX.get(1)*alignementX.get(1)*alignementX.get(1)*(-1);
-		double poidsQuatreX = alignementX.get(2)*1;
-		double poidsQuatreO = alignementO.get(2)*-1;
-		return poidsQuatreO*Double.MAX_VALUE;//+gauss(symboleJoueurCourant)-gauss(symboleAutreJoueur)
+		//ArrayList<Integer> alignementX = verificationAlignements(symboleJoueurCourant);
+		//ArrayList<Integer> alignementO = verificationAlignements(symboleAutreJoueur);
+		//double poidsDeuxX = alignementX.get(0)*2;
+		//double poidsDeuxO = alignementO.get(0)*3*(-1);
+		//double poidsTroisX = alignementX.get(1)*8;
+		//double poidsTroisO = alignementO.get(1)*10*(-1);
+		//double poidsQuatreX = alignementX.get(2)*1;
+		//double poidsQuatreO = alignementO.get(2)*-1;
+		//System.out.println(verificationAlignements(symboleAutreJoueur));
+		return verificationAlignements(symboleJoueurCourant)*1-verificationAlignements(symboleAutreJoueur)*(100)+gauss(symboleJoueurCourant)-gauss(symboleAutreJoueur);//+poidsDeuxO+poidsDeuxX+poidsTroisX+poidsTroisO+gauss(symboleJoueurCourant)*0.5-gauss(symboleAutreJoueur)*0.5;//+gauss(symboleJoueurCourant)-gauss(symboleAutreJoueur)
 		//return poidsQuatreO+poidsQuatreX;
 	}
 
@@ -218,127 +219,64 @@ public class Grille {
 		return utility + sum;
 	}
 
-	/**
-	 *
-	 * @param symboleJoueurCourant
-	 * @return ArrayList contenant de 0 à 2 la liste du nombre d'alignements de 2 à 4
-	 */
-
-	private ArrayList<Integer> verificationAlignements(Case symboleJoueurCourant){
+	private double verificationAlignements(Case symboleJoueurCourant) {
+		int nbAlignes = 0;
 		//Vérification alignement horizontaux
-		ArrayList<Integer> alignements = new ArrayList<Integer>();
-		int deux = 0;
-		int trois = 0;
-		int quatre = 0;
-		int nbAlignes=0;
-		for(int i=0;i<Constantes.NB_LIGNES;i++)
-		{
-			for(int j=0;j<Constantes.NB_COLONNES;j++)
-			{
-				if(grille[j][i]==symboleJoueurCourant)
+		for (int i = 0; i < Constantes.NB_LIGNES; i++) {
+			for (int j = 0; j < Constantes.NB_COLONNES; j++) {
+				if (grille[j][i] == symboleJoueurCourant)
 					nbAlignes++;
-				else{
-					switch (nbAlignes){
-						case 2:
-							deux = deux + 1;
-							break;
-						case 3:
-							trois = trois + 1;
-							break;
-						case 4:
-							quatre = quatre + 1;
-							break;
-						default:
-
-					}
-					nbAlignes=0;
+				else
+					nbAlignes = 0;
+				if (nbAlignes == 4) {
+					return 10_000;
 				}
 			}
-			nbAlignes=0;
+			nbAlignes = 0;
 		}
 		//Vérification alignement verticaux
-		for(int j=0;j<Constantes.NB_COLONNES;j++) {
+		for (int j = 0; j < Constantes.NB_COLONNES; j++) {
 			for (int i = 0; i < Constantes.NB_LIGNES; i++) {
 				if (grille[j][i] == symboleJoueurCourant)
 					nbAlignes++;
-				else {
-					switch (nbAlignes) {
-						case 2:
-							deux = deux + 1;
-							break;
-						case 3:
-							trois = trois + 1;
-							break;
-						case 4:
-							quatre = quatre + 1;
-							break;
-						default:
-
-					}
+				else
 					nbAlignes = 0;
+				if (nbAlignes == 4) {
+					return 10_000;
 				}
 			}
 			nbAlignes = 0;
 		}
 		//Vérification alignement diagonaux (bas-droite vers haut-gauche)
-		for(int i=0;i<Constantes.NB_LIGNES-3;i++)
-			for(int j=0;j<Constantes.NB_COLONNES-3;j++)
-			{
-				for(int x=0;i+x<Constantes.NB_LIGNES&&j+x<Constantes.NB_COLONNES;x++)
-				{
-					if(grille[j+x][i+x]==symboleJoueurCourant)
+		for (int i = 0; i < Constantes.NB_LIGNES - 3; i++)
+			for (int j = 0; j < Constantes.NB_COLONNES - 3; j++) {
+				for (int x = 0; i + x < Constantes.NB_LIGNES && j + x < Constantes.NB_COLONNES; x++) {
+					if (grille[j + x][i + x] == symboleJoueurCourant)
 						nbAlignes++;
-					else {
-						switch (nbAlignes) {
-							case 2:
-								deux = deux + 1;
-								break;
-							case 3:
-								trois = trois + 1;
-								break;
-							case 4:
-								quatre = quatre + 1;
-								break;
-							default:
-
-						}
+					else
 						nbAlignes = 0;
+					if (nbAlignes == 4) {
+						return 10_000;
 					}
 				}
 				nbAlignes = 0;
 			}
 
 		//Vérification alignement diagonaux (bas-gauche vers haut-droit)
-		for(int i=0;i<Constantes.NB_LIGNES-3;i++)
-			for(int j=Constantes.NB_COLONNES-1;j>=3;j--)
-			{
-				for(int x=0;i+x<Constantes.NB_LIGNES&&j-x>=0;x++)
-				{
-					if(grille[j-x][i+x]==symboleJoueurCourant)
+		for (int i = 0; i < Constantes.NB_LIGNES - 3; i++)
+			for (int j = Constantes.NB_COLONNES - 1; j >= 3; j--) {
+				for (int x = 0; i + x < Constantes.NB_LIGNES && j - x >= 0; x++) {
+					if (grille[j - x][i + x] == symboleJoueurCourant)
 						nbAlignes++;
-					else {
-						switch (nbAlignes) {
-							case 2:
-								deux = deux + 1;
-								break;
-							case 3:
-								trois = trois + 1;
-								break;
-							case 4:
-								quatre = quatre + 1;
-								break;
-							default:
-
-						}
+					else
 						nbAlignes = 0;
+					if (nbAlignes == 4) {
+						return 10_000;
 					}
 				}
 				nbAlignes = 0;
 			}
-		alignements.add(deux);
-		alignements.add(trois);
-		alignements.add(quatre);
-		return alignements;
+		return 0;
 	}
 
 		/**
