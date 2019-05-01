@@ -23,7 +23,7 @@ public class AlphaBeta extends Algorithm {
 			if (grilleDepart.isCoupPossible(i)){
 				Grille cpy = grilleDepart.clone();
 				cpy.ajouterCoup(i, symboleMax);
-				double value = mini(cpy, tourDepart, Constantes.SCORE_MIN_NON_DEFINI, Constantes.SCORE_MAX_NON_DEFINI);
+				double value = mini(cpy, tourDepart, Constantes.SCORE_MAX_NON_DEFINI, Constantes.SCORE_MIN_NON_DEFINI);
 				if (value >= meilleurValue){
 					meilleurValue = value;
 					colAJouer = i;
