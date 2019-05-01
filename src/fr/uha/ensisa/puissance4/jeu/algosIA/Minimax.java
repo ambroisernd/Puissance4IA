@@ -33,7 +33,7 @@ public class Minimax extends Algorithm {
 					successors.add(i);
 				}
 			}
-		double value = -100000000;
+		double value = Constantes.SCORE_MAX_NON_DEFINI;
 		double tmp;
 		for (int i = 0; i < successors.size(); i++) {
 
@@ -59,7 +59,7 @@ public class Minimax extends Algorithm {
 					successors.add(i);
 				}
 			}
-			double value = 100000000;
+			double value = Constantes.SCORE_MIN_NON_DEFINI;
 			double tmp;
 			for (int i = 0; i < successors.size(); i++) {
 				tmp = maxi(genSuccessor(grille, symboleMin, successors.get(i)), profondeur-1);

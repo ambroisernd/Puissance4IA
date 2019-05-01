@@ -188,7 +188,7 @@ public class Grille {
 		else {
 			symboleAutreJoueur = Case.X;
 		}
-		return verificationAlignements(symboleJoueurCourant)-verificationAlignements(symboleAutreJoueur)+gauss(symboleJoueurCourant);
+		return verificationAlignements(symboleJoueurCourant)-verificationAlignements(symboleAutreJoueur)+gauss(symboleJoueurCourant)*0.001;
 	}
 
 	public int gauss(Case symboleJoueurCourant){
@@ -198,7 +198,7 @@ public class Grille {
 				{5, 8, 11, 13, 11, 8, 5},
 				{4, 6, 8, 10, 8, 6, 4},
 				{3, 4, 5, 7, 5, 4, 3}};
-		int utility = 138;
+		//int utility = 138;
 		int sum = 0;
 		for (int i = 0; i < Constantes.NB_LIGNES; i++)
 			for (int j = 0; j <Constantes.NB_COLONNES; j++)
@@ -206,7 +206,7 @@ public class Grille {
 					sum += evaluationTable[i][j];
 				else if (grille[j][i] != symboleJoueurCourant && grille[j][i] != Case.V)
 					sum -= evaluationTable[i][j];
-		return utility + sum;
+		return sum; //utility +
 	}
 
 	public double verificationAlignements(Case symboleJoueurCourant) {
@@ -219,7 +219,7 @@ public class Grille {
 				else
 					nbAlignes = 0;
 				if (nbAlignes == 4) {
-					return 10_000;
+					return 1;
 				}
 			}
 			nbAlignes = 0;
@@ -232,7 +232,7 @@ public class Grille {
 				else
 					nbAlignes = 0;
 				if (nbAlignes == 4) {
-					return 10_000;
+					return 1;
 				}
 			}
 			nbAlignes = 0;
@@ -246,7 +246,7 @@ public class Grille {
 					else
 						nbAlignes = 0;
 					if (nbAlignes == 4) {
-						return 10_000;
+						return 1;
 					}
 				}
 				nbAlignes = 0;
@@ -261,7 +261,7 @@ public class Grille {
 					else
 						nbAlignes = 0;
 					if (nbAlignes == 4) {
-						return 10_000;
+						return 1;
 					}
 				}
 				nbAlignes = 0;
