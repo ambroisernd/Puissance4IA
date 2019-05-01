@@ -19,25 +19,30 @@ public class AlphaBeta extends Algorithm {
 	public int choisirCoup() {
 		Grille grille = this.grilleDepart;
 		int profondeur = this.levelIA;
+
 		ArrayList<Integer> actions = new ArrayList<Integer>();
 		for (int i = 0; i < Constantes.NB_COLONNES; i++) {
 			if (grille.isCoupPossible(i)) {
 				actions.add(i);
 			}
 		}
-		boolean isMax = true;
+
+		boolean isMax = false;
 		double maxEval = -Double.MAX_VALUE;
 		double newEval;
 		int maxCoup = 1;
 		int newCoup = 1;
 
+		double alpha = Constantes.SCORE_MAX_NON_DEFINI;
+		double beta = Constantes.SCORE_MIN_NON_DEFINI;
+
 		for (Integer i : actions) {
 			newCoup = i;
-			double alpha = -Double.MAX_VALUE;
-			double beta = Double.MAX_VALUE;
-			newEval = alphabeta(symboleMax,grille.clone(), alpha, beta, profondeur, isMax);
+			Grille nouvelleGrille = grilleDepart.clone();
+			nouvelleGrille.ajouterCoup(i, symboleMax);
+			newEval = alphabeta(symboleMin,grille.clone(), alpha, beta, profondeur, isMax);
 
-			if (newEval > maxEval) {
+			if (newEval >= maxEval) {
 				maxEval = newEval;
 				maxCoup = newCoup;
 			}
@@ -99,8 +104,9 @@ public class AlphaBeta extends Algorithm {
 	double alphabeta(Constantes.Case symboleJoueurCourant, Grille grille, double alpha, double beta, int profondeur, boolean isMax) {
 		if (profondeur == 0) {
 			return grille.evaluer(symboleJoueurCourant);
-		} else {
-			double meilleur = -Double.MAX_VALUE;
+		}
+		else {
+			double meilleur = Constantes.SCORE_MAX_NON_DEFINI;
 			//Construction coups possible
 			ArrayList<Integer> actions = new ArrayList<Integer>();
 			for (int i = 0; i < Constantes.NB_COLONNES; i++) {
@@ -129,7 +135,6 @@ public class AlphaBeta extends Algorithm {
 						}
 					}
 				}
-
 			}
 			return meilleur;
 		}
